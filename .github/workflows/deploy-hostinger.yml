@@ -1,0 +1,36 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Hostinger
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          password: ${{ secrets.HOSTINGER_PASSWORD }}
+          port: 65002
+          source: ".,!vendor,!node_modules,!*.env,!storage/logs/*"
+          target: ~/domains/fundisc.fr/public_html/
+          
+      - name: Post-deploy setup
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          password: ${{ secrets.HOSTINGER_PASSWORD }}
+          port: 65002
+          script: |
+            cd ~/domains/fundisc.fr/public_html
+            composer install --no-dev --optimize-autoloader
+            php artisan migrate --force
+            php artisan cache:clear
+            php artisan config:cache
