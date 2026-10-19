@@ -1,64 +1,56 @@
-# Vinyl Stock 🎸
+# fundisc 🛒
 
-> Plateforme de vente et gestion de vinyles hydrodécoupés
+> E-commerce généraliste — ventes en ligne et caisse marché.
 
-[![Tests](https://github.com/aurelien-c/vinyl-stock/actions/workflows/ci.yml/badge.svg)](https://github.com/aurelien-c/vinyl-stock/actions/workflows/ci.yml)
-[![Deploy](https://github.com/aurelien-c/vinyl-stock/actions/workflows/deploy.yml/badge.svg)](https://github.com/aurelien-c/vinyl-stock/actions/workflows/deploy.yml)
-![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
-[![PHP](https://img.shields.io/badge/PHP-8.3+-blue)](https://php.net)
-[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20)](https://laravel.com)
-[![Stripe](https://img.shields.io/badge/Stripe-Ready-635BFF)](https://stripe.com)
+[![PHP](https://img.shields.io/badge/PHP-8.1+-blue)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20)](https://laravel.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D)](https://vuejs.org)
+[![Stripe](https://img.shields.io/badge/Paiement-Stripe-635BFF)](https://stripe.com)
 
 ## 🎯 À propos
 
-Vinyl Stock est une plateforme e-commerce complète pour la gestion et la vente de vinyles hydrodécoupés. Elle intègre un **mode marché** (caisse/emport pour événements), un **kiosque public** de consultation, et un **dashboard administrateur** avec rapports et statistiques.
+fundisc est une boutique en ligne Laravel avec un **catalogue public**, un **tunnel de vente** complet, un **dashboard administrateur** et une caisse **mode marché** pour les ventes en direct (salons, marchés, événements).
 
-**Localisation** : 48150, Le Rozier, France
+Le projet est configuré et déployable sur un hébergement classique (Nginx + PHP-FPM).
 
-## 🚀 Fonctionnalités
+## 🚀 Fonctionnalités principales
 
-### ✅ Terminé
+- **Catalogue public** — consultation des produits, fiches détaillées, avis clients.
+- **Panier et commandes** — panier session + fusion à la connexion, adresses livraison/facturation, historique client.
+- **Paiement Stripe** — checkout Stripe, webhooks, pages succès/annulation.
+- **RBAC** — rôles `admin`, `employé` et `client` via middleware personnalisé.
+- **Mode marché** — caisse emport avec historique des ventes, annulation et restock, export CSV.
+- **Gestion produits** — CRUD vinyles, gestion des fonds (stock miroir/doré), galerie photos.
+- **Alertes stock** — suivi des seuils et historique des alertes.
+- **Rapports** — exports PDF/CSV et statistiques mensuelles.
+- **Messagerie** — conversations clients et messages de contact côté admin.
 
-- [x] **Kiosque de consultation** — Grille publique avec filtrage
-- [x] **Tunnel de vente** — Panier, adresses, commandes
-- [x] **Paiement Stripe** — Checkout, webhooks, confirmations
-- [x] **RBAC** — Rôles (Admin/Employé/Client) sécurisés
-- [x] **Mode Marché** — Caisse emport avec annulation/restock
-- [x] **Rapports** — Exports PDF/CSV, stats mensuelles
-
-### 📋 En cours / À venir
-
-- [ ] Tests T14 — Mode Marché (validation)
-- [ ] Tests T15 — Performance
-- [ ] Déploiement production
-
-## 🛠️ Stack Technique
+## 🛠️ Stack technique
 
 | Composant | Technologie |
 |-----------|-------------|
-| Backend | PHP 8.3, Laravel 11 |
-| Frontend | Vue.js 3, Inertia.js, Tailwind CSS, Vite |
-| Base de données | MySQL 8.0 (production), SQLite (tests) |
-| Cache | Redis (optionnel) |
+| Backend | PHP 8.1+, Laravel 10.x |
+| Frontend | Vue.js 3, Vite, Tailwind CSS, Bootstrap 5 |
+| Base de données | MySQL 8.0+ (production), SQLite (tests) |
+| Auth | Laravel Breeze + rôles custom |
 | Paiement | Stripe |
-| Auth | Laravel Breeze + RBAC custom |
-| Médias | Spatie Media Library |
+| Médias | Spatie Laravel Media Library |
+| Sauvegardes | Spatie Laravel Backup |
+| Tests | PHPUnit |
 
 ## 📚 Documentation
 
+La documentation technique et opérationnelle se trouve dans le dossier [`docs/`](docs/) :
+
 | Document | Description |
 |----------|-------------|
-| [📐 Architecture](docs/ARCHITECTURE.md) | Structure technique, flux de données, sécurité RBAC |
-| [🚀 Déploiement](docs/DEPLOYMENT.md) | Guide complet déploiement Nginx + SSL |
-| [📡 API](docs/API.md) | Endpoints JSON, paramètres, codes d'erreur |
-| [✅ Post-Déploiement](docs/POST-DEPLOYMENT.md) | Checklist validation après mise en prod |
-| [🔧 Troubleshooting](docs/TROUBLESHOOTING.md) | Solutions erreurs courantes |
-| [💳 Stripe](docs/STRIPE_INSTALL.md) | Configuration paiements |
-| [🗺️ Adresses](docs/ADRESSES.md) | Système d'adresses clients |
+| [Architecture](docs/ARCHITECTURE.md) | Structure, flux de données, RBAC |
+| [Déploiement](docs/DEPLOYMENT.md) | Guide Nginx + SSL + envoi en production |
+| [Post-déploiement](docs/POST-DEPLOYMENT.md) | Checklist de validation |
+| [Troubleshooting](docs/TROUBLESHOOTING.md) | Erreurs courantes |
+| [Mode Marché](docs/MODE_MARCHE_SPECS.md) | Spécifications de la caisse emport |
 
 ## 🧪 Tests
-
-### Exécution rapide
 
 ```bash
 # Tous les tests
@@ -68,55 +60,28 @@ php artisan test
 php artisan test tests/Feature/Security/
 php artisan test tests/Feature/ModeMarche/
 php artisan test tests/Feature/Performance/
-
-# Avec couverture
-php artisan test --coverage
 ```
-
-### Phases de sécurité (T13)
-
-```bash
-php artisan test tests/Feature/Security/SecurityTest.php
-# ~20 tests — Validation RBAC, IDOR, headers sécurité
-```
-
-### Mode Marché (T14)
-
-```bash
-php artisan test tests/Feature/ModeMarche/ModeMarcheTest.php
-# ~15 tests — Historique, annulation, export CSV
-```
-
-## 📋 Comptes de test
-
-| Rôle | Email | Mot de passe |
-|------|-------|-------------|
-| Admin | admin@example.com | password |
-| Employé | employe@example.com | password |
-| Client | client@example.com | password |
-
-> **⚠️ Production** : Changer les mots de passe !
 
 ## 🚀 Installation locale
 
 ### Prérequis
 
-- PHP 8.3+
+- PHP 8.1+
 - Composer 2.x
-- Node.js 20+
-- MySQL 8.0+ (ou SQLite pour tests)
+- Node.js 18+
+- MySQL 8.0+ (ou SQLite pour tester)
 
 ### Installation
 
 ```bash
 # 1. Cloner
-git clone <repository-url> vinyl-stock
-cd vinyl-stock
+git clone https://github.com/LittllMind/fundisc.git
+cd fundisc
 
-# 2. PHP
+# 2. Dépendances PHP
 composer install
 
-# 3. Node
+# 3. Dépendances frontend
 npm ci
 
 # 4. Configuration
@@ -124,10 +89,11 @@ cp .env.example .env
 php artisan key:generate
 
 # 5. Éditer .env
-# DB_DATABASE=vinyl_stock
+# DB_DATABASE=fundisc
 # DB_USERNAME=root
 # DB_PASSWORD=secret
 # STRIPE_KEY=sk_test_...
+# STRIPE_WEBHOOK_SECRET=whsec_...
 
 # 6. Base de données
 php artisan migrate --seed
@@ -139,78 +105,47 @@ npm run build
 php artisan serve
 ```
 
-### Health Check
+### Vérification
 
 ```bash
 ./scripts/health-check.sh --verbose
 ```
 
+## 🖥️ Utilisation
+
+| Zone | URL locale | Accès |
+|------|------------|-------|
+| Accueil / catalogue | `http://localhost:8000/` | Public |
+| Catalogue | `http://localhost:8000/kiosque` | Public |
+| Panier | `http://localhost:8000/cart` | Public |
+| Espace client | `http://localhost:8000/dashboard` | Connecté |
+| Administration | `http://localhost:8000/admin/dashboard` | Admin / Employé |
+| Mode marché | `http://localhost:8000/admin/marche` | Admin / Employé |
+
 ## 📦 Structure du projet
 
 ```
-vinyl-stock/
+fundisc/
 ├── app/
-│   ├── Http/Controllers/    # API + Web
-│   │   ├── ModeMarcheController.php    # Caisse/emport
-│   │   └── KiosqueController.php       # Public
-│   ├── Models/
-│   ├── Services/            # Logique métier
+│   ├── Http/Controllers/    # Contrôleurs web et admin
+│   ├── Models/              # Eloquent + relations
+│   ├── Services/            # Logique métier (panier, stock...)
 │   └── Policies/            # Autorisations RBAC
 ├── database/
-├── resources/js/            # Vue + Inertia
-├── routes/web.php           # Routes
-├── tests/Feature/           # Tests intégration
+├── resources/js/            # Vue.js + Vite
+├── routes/web.php           # Routes principales
+├── tests/Feature/           # Tests fonctionnels
 └── docs/                    # Documentation
 ```
 
-## 🖥️ Utilisation
+## 📸 Démo / captures
 
-### Kiosque (Client)
-```
-http://localhost:8000/kiosque
-```
-Parcourir le catalogue, ajouter au panier, commander.
-
-### Admin
-```
-http://localhost:8000/admin
-```
-Gestion vinyles, utilisateurs, rapports, stats.
-
-### Mode Marché (Employé)
-```
-http://localhost:8000/admin/marche
-```
-Caisse pour événements (salons, marchés).
-
-## 📊 Métriques
-
-| Objectif | Valeur |
-|----------|--------|
-| Chargement pages | < 2s |
-| Conversion | > 3% |
-| Uptime | 99.9% |
-| Tests passants | 100% |
-
-## 🤝 Contribuer
-
-1. Fork
-2. Branche: `git checkout -b feature/Nom`
-3. Test: `php artisan test` (100% vert)
-4. Commit: `git commit -m "feat: description"`
-5. PR avec description
+Aucune démo publique ni capture d'écran n'est disponible actuellement.
 
 ## 📄 Licence
 
 MIT License — voir [LICENSE](LICENSE)
 
-## 📞 Contact
-
-- **Projet** : Vinyl Stock
-- **Localisation** : 48150, Le Rozier
-
 ---
 
-**[⬆️ Documentation](#documentation)** | **[🚀 Déployer](docs/DEPLOYMENT.md)** | **[🔧 Dépanner](docs/TROUBLESHOOTING.md)**
-
-*Dernière mise à jour: mars 2026*
+*Dernière mise à jour : octobre 2026*
